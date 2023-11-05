@@ -4,15 +4,15 @@
       "id": "itsmarzzzzzz@protonmail.com"
     }
   },
-  "name": "Youtube AdSkipper",
+  "name": "Youtube AdSkipper/AdBlocker",
   "version": "1.0.0",
   "manifest_version": 3,
-  "description": "Adskupper, skip dem ads.",
+  "description": "The only Youtube AdSkipper/AdBlocker that works.",
   "author": "Marsss' Dev Team",
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*"],
-      "js": ["/popup/contentScript.js"],
+      "js": ["/src/contentScript.js"],
       "run_at": "document_end"
     }
   ],
@@ -24,6 +24,6 @@
   //   "128": "assets/icon-128.png"
   // },
   "action": {
-    "default_popup": "/popup/popup.html"
+    "default_popup": "/src/popup.html"
   }
 }

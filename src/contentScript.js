@@ -3,13 +3,13 @@ adskipper.setAttribute("id", "adskipper");
 
 const ascontent = document.createElement("as-content");
 
-const skipad = document.createElement("button");
-skipad.innerHTML = "Skip Ad";
+// const skipad = document.createElement("button");
+// skipad.innerHTML = "Skip Ad";
 // skipad.addEventListener("click", () => {
 //     skipToEnd();
 // });
 
-ascontent.appendChild(skipad);
+// ascontent.appendChild(skipad);
 
 const shadow = adskipper.attachShadow({ mode: "open" });
 const style = document.createElement("style");
