@@ -7,9 +7,16 @@
   "name": "Youtube AdSkipper",
   "version": "1.0.0",
   "manifest_version": 3,
-  "description": "Adskupper",
+  "description": "Adskupper, skip dem ads.",
   "author": "Marsss' Dev Team",
-  "permissions": ["scripting", "activeTab", "storage", "tabs"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["/popup/contentScript.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": ["scripting", "activeTab"],
   // "icons": {
   //   "16": "assets/icon-16.png",
   //   "32": "assets/icon-32.png",
