@@ -1,13 +1,13 @@
 {
   "browser_specific_settings": {
     "gecko": {
-      "id": "itsmarzzzzzz@protonmail.com"
+      "id": "youtubeadskipper.itsmarzzzzzz@protonmail.com"
     }
   },
-  "name": "Youtube AdSkipper/AdBlocker",
+  "name": "YouTube AdSkipper/AdBlocker",
   "version": "1.0.0",
   "manifest_version": 3,
-  "description": "The only Youtube AdSkipper/AdBlocker that works.",
+  "description": "The only YouTube AdSkipper/AdBlocker that works.",
   "author": "Marsss' Dev Team",
   "content_scripts": [
     {
