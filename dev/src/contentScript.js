@@ -19,29 +19,38 @@ function checkControllerNode() {
 
 function startSkipper() {
     function skipSegment() {
-        var video = document.getElementsByTagName('video');
+        function performSkip() {
+            var video = document.getElementsByTagName('video');
 
-        if (video.length == 0) {
-            return;
+            if (video.length == 0) {
+                return;
+            }
+
+            video = video[0];
+
+            video.addEventListener('loadeddata', () => {
+                var skipbutton = document.getElementsByClassName('ytp-ad-skip-button');
+                var previewcont = document.getElementsByClassName('ytp-ad-preview-container');
+
+                if (skipbutton.length != 0 || previewcont.length != 0) {
+                    if (video.duration == NaN) {
+                        return;
+                    }
+
+                    video.currentTime = video.duration;
+                    incrementSkipped();
+
+                    if (skipbutton.length != 0) {
+                        skipbutton[0].click();
+                    }
+                }
+            });
         }
 
-        video = video[0];
-
-        video.addEventListener('loadeddata', () => {
-            var skipbutton = document.getElementsByClassName('ytp-ad-skip-button');
-            var previewcont = document.getElementsByClassName('ytp-ad-preview-container');
-
-            if (skipbutton.length != 0 || previewcont.length != 0) {
-                if (video.duration == NaN) {
-                    return;
-                }
-
-                video.currentTime = video.duration;
-                incrementSkipped();
-
-                if (skipbutton.length != 0) {
-                    skipbutton[0].click();
-                }
+        chrome.storage.local.get(['enabled'], function (result) {
+            var enabled = result.enabled || false;
+            if (enabled) {
+                performSkip();
             }
         });
     }
