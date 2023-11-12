@@ -157,8 +157,14 @@ a {
 
 #skip-count {
     font-weight: bold;
-    font-size: 25px;
-    color: var(--text);
+    font-size: 20px;
+    color: var(--text-accent);
+    transition: 800ms ease-out;
+}
+
+.count-ready {
+    transform: scale(1.5);
+    color: var(--text) !important;
 }
 
 #skip-text {

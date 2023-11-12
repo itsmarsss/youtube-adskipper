@@ -24,13 +24,36 @@ toggle_button.addEventListener('click', () => {
 
         setEnabled(skipper_enabled);
     }, 200);
+
+    skip_count.classList.toggle("count-ready");
 });
 
 getEnabled();
 
 chrome.storage.local.get(['skipped'], function (result) {
-    skip_count.innerHTML = result.skipped || 0;
+    var skipped = result.skipped || 0;
+    animateNumber(skipped, 1000);
 });
+
+function animateNumber(targetNumber, duration) {
+    const startNumber = 0;
+    const increment = 1; // You can adjust this value to change the increment amount
+    const delay = Math.floor(duration / (targetNumber / increment));
+
+    function updateNumber(currentNumber) {
+        skip_count.textContent = currentNumber;
+    }
+
+    function animate() {
+        for (let i = startNumber; i <= targetNumber; i += increment) {
+            setTimeout(() => {
+                updateNumber(i);
+            }, i * delay);
+        }
+    }
+
+    animate();
+}
 
 function getEnabled() {
     chrome.storage.local.get(['enabled'], function (result) {
