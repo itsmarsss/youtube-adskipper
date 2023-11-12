@@ -1,44 +1,21 @@
-const adskipper = document.createElement("div");
-adskipper.setAttribute("id", "adskipper");
+console.log("YTSkipper Start Here");
 
-const ascontent = document.createElement("as-content");
+var vsc_controller_node = null;
 
-// const skipad = document.createElement("button");
-// skipad.innerHTML = "Skip Ad";
-// skipad.addEventListener("click", () => {
-//     skipToEnd();
-// });
+var observer = new MutationObserver(function () {
+    console.log('DOM has changed on YouTube.');
+    checkControllerNode();
+});
 
-// ascontent.appendChild(skipad);
+var config = { attributes: true, childList: true, subtree: true };
 
-const shadow = adskipper.attachShadow({ mode: "open" });
-const style = document.createElement("style");
-style.textContent = `
-as-content {
-    // n/a
-}
-`;
-shadow.appendChild(style);
-shadow.appendChild(ascontent);
+observer.observe(document, config);
 
-document.body.appendChild(adskipper);
-
-setInterval(() => {
-    var skipbutton = document.getElementsByClassName('ytp-ad-skip-button');
-    var previewcont = document.getElementsByClassName('ytp-ad-preview-container');
-
-    //console.log(skipbutton.length + ":" + previewcont.length);
-
-    if (skipbutton.length != 0 || previewcont.length != 0) {
-        try {
-            var video = document.getElementsByTagName('video')[0];
-            video.currentTime = video.duration;
-        } catch (ex) {
-            //console.log("Error skipping ad.");
-        }
-        if (skipbutton.length != 0) {
-            skipbutton[0].click();
-            //console.log("Skip clicked.");
-        }
+function checkControllerNode() {
+    if (vsc_controller_node != null) {
+        observer.disconnect();
+        console.log(vsc_controller_node.classList)
+        return;
     }
-}, 250);
+    vsc_controller_node = document.getElementsByClassName('vsc-controller')[0];
+}
