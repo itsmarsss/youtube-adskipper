@@ -95,7 +95,7 @@ a {
     z-index: -1;
     transform-origin: left;
     transform: scaleX(0);
-    transition: 500ms ease-out;
+    transition: 600ms ease-out;
 }
 
 #panel.toggled-on:before {
