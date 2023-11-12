@@ -1,20 +1,16 @@
-console.log("YTSkipper Start Here");
-
 var html5_video_container_node = null;
 
+var observerConfig = { attributes: true, childList: true, subtree: true };
+
 var observer = new MutationObserver(function () {
-    console.log('DOM has changed on YouTube.');
     checkControllerNode();
 });
 
-var config = { attributes: true, childList: true, subtree: true };
-
-observer.observe(document, config);
+observer.observe(document, observerConfig);
 
 function checkControllerNode() {
     if (html5_video_container_node != null) {
         observer.disconnect();
-        console.log(html5_video_container_node.classList);
         startSkipper();
         return;
     }
@@ -23,30 +19,33 @@ function checkControllerNode() {
 
 function startSkipper() {
     function skipSegment() {
-        var video = document.getElementsByTagName('video')[0];
+        var video = document.getElementsByTagName('video');
 
-        console.log('Load Requested');
+        if (video.length == 0) {
+            return;
+        }
+
+        video = video[0];
+
         video.addEventListener('loadeddata', () => {
-            console.log('Done Loading');
             var skipbutton = document.getElementsByClassName('ytp-ad-skip-button');
             var previewcont = document.getElementsByClassName('ytp-ad-preview-container');
 
             if (skipbutton.length != 0 || previewcont.length != 0) {
-                console.log("AdDetected.");
                 if (video.duration == NaN) {
-                    console.log("NAN.");
                     return;
                 }
+
                 video.currentTime = video.duration;
-                console.log("Skipped.");
 
                 if (skipbutton.length != 0) {
                     skipbutton[0].click();
-                    console.log("Skip clicked.");
                 }
             }
         });
     }
+
+    skipSegment();
 
     var observer = new MutationObserver(function (mutations) {
         function isVideo(nodeList) {
@@ -71,7 +70,5 @@ function startSkipper() {
         });
     });
 
-    var config = { attributes: true, childList: true, subtree: true };
-
-    observer.observe(html5_video_container_node, config);
+    observer.observe(html5_video_container_node, observerConfig);
 }
