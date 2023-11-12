@@ -1,7 +1,21 @@
 <script type="module" src="popup.js"></script>
 <link rel="stylesheet" href="popup.css">
-YouTube AdSkipper is active.
-<div>
-    <a href=""><button>Report Issue</button></a>
-    <a href="https://discord.gg/K8hgFHWeJQ" target="_blank"><button>Join Discord</button></a>
+
+<div class="container">
+    <div class="toggle-switch">
+        <label class="switch">
+            <input type="checkbox" id="toggleSwitch">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="counter-section">
+        <p class="counter" id="adsCounter">0</p>
+        <button class="reset-button" id="resetButton">Reset Counter</button>
+    </div>
+
+    <div class="footer">
+        <a href="mailto:itsmarzzzzzz@protonmail.com"><button class="action-button">Report Issue</button></a>
+        <a href="https://discord.gg/K8hgFHWeJQ" target="_blank"><button class="action-button">Join Discord</button></a>
+    </div>
 </div>
