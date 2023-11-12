@@ -23,22 +23,31 @@ function checkControllerNode() {
 
 function startSkipper() {
     function skipSegment() {
-        var skipbutton = document.getElementsByClassName('ytp-ad-skip-button');
-        var previewcont = document.getElementsByClassName('ytp-ad-preview-container');
+        var video = document.getElementsByTagName('video')[0];
 
-        if (skipbutton.length != 0 || previewcont.length != 0) {
-            try {
-                var video = document.getElementsByTagName('video')[0];
+        console.log('Load Requested');
+        video.addEventListener('loadeddata', () => {
+            console.log('Done Loading');
+            var skipbutton = document.getElementsByClassName('ytp-ad-skip-button');
+            var previewcont = document.getElementsByClassName('ytp-ad-preview-container');
+
+            if (skipbutton.length != 0 || previewcont.length != 0) {
+                console.log("AdDetected.");
+                if (video.duration == NaN) {
+                    console.log("NAN.");
+                    return;
+                }
                 video.currentTime = video.duration;
-            } catch (ex) {
-                //console.log("Error skipping ad.");
+                console.log("Skipped.");
+
+                if (skipbutton.length != 0) {
+                    skipbutton[0].click();
+                    console.log("Skip clicked.");
+                }
             }
-            if (skipbutton.length != 0) {
-                skipbutton[0].click();
-                //console.log("Skip clicked.");
-            }
-        }
+        });
     }
+
     var observer = new MutationObserver(function (mutations) {
         function isVideo(nodeList) {
             for (var i = 0; i < nodeList.length; i++) {
@@ -51,14 +60,12 @@ function startSkipper() {
 
         mutations.forEach(function (mutation) {
             if (mutation.type === 'childList') {
-                if (isVideo(mutation.addedNodes) || isVideo(mutation.removedNodes)) {
-                    console.log('Nodes added:', mutation.addedNodes);
-                    console.log('Nodes removed:', mutation.removedNodes);
+                if (isVideo(mutation.addedNodes)) {
+                    skipSegment();
                 }
             } else if (mutation.type === 'attributes') {
                 if (mutation.attributeName == 'src') {
-                    console.log('Attribute modified:', mutation.attributeName);
-                    console.log('Old attribute value:', mutation.oldValue);
+                    skipSegment();
                 }
             }
         });
