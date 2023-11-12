@@ -86,6 +86,6 @@ function startSkipper() {
 async function incrementSkipped() {
     chrome.storage.local.get(['skipped'], function (result) {
         var value = result.skipped || 0;
-        chrome.storage.local.set({ skipped: value + 1 }, function () { });
+        chrome.storage.local.set({ skipped: value + 2 }, function () { });
     });
 }
