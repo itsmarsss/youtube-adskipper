@@ -1,3 +1,4 @@
+const panel = document.getElementById('panel');
 const toggle_button = document.getElementById('toggle-button');
 const toggle_button_icon = document.getElementById('toggle-button-icon');
 const toggle_text = document.getElementById('toggle-text');
@@ -14,6 +15,7 @@ toggle_button.addEventListener('click', () => {
             toggle_text.innerHTML = 'enabled';
         }
         toggle_button_icon.classList.remove('fade-out');
+        panel.classList.toggle('toggled-on');
         toggle_text.classList.toggle('toggled-on');
     }, 200);
 });
