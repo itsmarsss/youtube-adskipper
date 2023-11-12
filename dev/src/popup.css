@@ -13,7 +13,7 @@
 
 html {
     width: 300px;
-    height: 260px;
+    height: 273px;
     background: var(--background);
     user-select: none;
 }
@@ -81,6 +81,7 @@ a {
     gap: 15px;
     position: relative;
     z-index: 1;
+    margin-bottom: 10px;
 }
 
 #panel:before {
@@ -90,7 +91,7 @@ a {
     height: 3px;
     border-radius: 3px;
     background: var(--yt);
-    bottom: -7px;
+    bottom: -10px;
     z-index: -1;
     transform-origin: left;
     transform: scaleX(0);

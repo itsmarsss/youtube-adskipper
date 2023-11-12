@@ -37,6 +37,7 @@ function startSkipper() {
                 }
 
                 video.currentTime = video.duration;
+                incrementSkipped();
 
                 if (skipbutton.length != 0) {
                     skipbutton[0].click();
@@ -71,4 +72,14 @@ function startSkipper() {
     });
 
     observer.observe(html5_video_container_node, observerConfig);
+}
+
+async function incrementSkipped() {
+    chrome.storage.local.get(['skipped'], function (result) {
+        console.log('Skipped queried');
+        var value = result.skipped || 0;
+        chrome.storage.local.set({ skipped: value + 1 }, function () {
+            console.log("Skipped setted");
+        });
+    });
 }
