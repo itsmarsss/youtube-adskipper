@@ -1,20 +1,33 @@
 <script type="module" src="popup.js"></script>
+
+<link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <link rel="stylesheet" href="popup.css">
 
 <div class="container">
-    <div class="toggle-switch">
-        <label class="switch">
-            <input type="checkbox" id="toggleSwitch">
-            <span class="slider"></span>
-        </label>
+    <div id="header">
+        <img id="icon" src="../assets/icon-512.png">
+        <span id="title">YouTube AdSkipper</span>
     </div>
 
-    <div class="counter-section">
-        <p class="counter" id="adsCounter">0</p>
-        <button class="reset-button" id="resetButton">Reset Counter</button>
+    <div class="section">
+        <div id="panel">
+            <div id="panel-left">
+                <div id="toggle-button">
+                    <span id="toggle-button-icon" class="material-symbols-outlined">
+                        pause
+                    </span>
+                </div>
+                <span id="toggle-text">ENABLED</span>
+            </div>
+            <div id="panel-right">
+                <span id="skip-count">0</span>
+                <span id="skip-text">Ads Skipped</span>
+            </div>
+        </div>
     </div>
 
-    <div class="footer">
+    <div class="section">
         <a href="mailto:itsmarzzzzzz@protonmail.com"><button class="action-button">Report Issue</button></a>
         <a href="https://discord.gg/K8hgFHWeJQ" target="_blank"><button class="action-button">Join Discord</button></a>
     </div>
