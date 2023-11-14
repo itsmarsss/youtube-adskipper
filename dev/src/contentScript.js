@@ -29,20 +29,24 @@ function startSkipper() {
             video = video[0];
 
             video.addEventListener('loadeddata', () => {
-                var skipbutton = document.getElementsByClassName('ytp-ad-skip-button');
-                var previewcont = document.getElementsByClassName('ytp-ad-preview-container');
+                var skipbutton_old = document.getElementsByClassName('ytp-ad-skip-button');
+                var previewcont_old = document.getElementsByClassName('ytp-ad-preview-container');
+                var skip_button = document.querySelectorAll('[id ^= "skip-button:"]');
 
-                if (skipbutton.length != 0 || previewcont.length != 0) {
+                if (skip_button.length >= 2) {
+                    skip_button[1].click();
+                    incrementSkipped();
+                } else if (skipbutton_old.length != 0 || previewcont_old.length != 0) {
                     if (video.duration == NaN) {
                         return;
                     }
 
                     video.currentTime = video.duration;
-                    incrementSkipped();
 
-                    if (skipbutton.length != 0) {
-                        skipbutton[0].click();
+                    if (skipbutton_old.length != 0) {
+                        skipbutton_old[0].click();
                     }
+                    incrementSkipped();
                 }
             });
         }
@@ -86,6 +90,6 @@ function startSkipper() {
 async function incrementSkipped() {
     chrome.storage.local.get(['skipped'], function (result) {
         var value = result.skipped || 0;
-        chrome.storage.local.set({ skipped: value + 2 }, function () { });
+        chrome.storage.local.set({ skipped: value + 1 }, function () { });
     });
 }
