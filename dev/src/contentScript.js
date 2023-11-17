@@ -19,21 +19,21 @@ function checkControllerNode() {
 
 function startSkipper() {
     function skipSegment() {
-        function performSkip() {
-            var video = document.getElementsByTagName('video');
+        function performCheck() {
+            function performSkip() {
+                async function incrementSkipped() {
+                    chrome.storage.local.get(['skipped'], function (result) {
+                        var value = result.skipped || 0;
+                        chrome.storage.local.set({ skipped: value + 1 }, function () { });
+                    });
+                }
 
-            if (video.length == 0) {
-                return;
-            }
-
-            video = video[0];
-
-            video.addEventListener('loadeddata', () => {
                 var skipbutton_old = document.getElementsByClassName('ytp-ad-skip-button');
                 var previewcont_old = document.getElementsByClassName('ytp-ad-preview-container');
                 var skip_button = document.querySelectorAll('[id ^= "skip-button:"]');
 
                 if (skip_button.length >= 2) {
+                    skip_button[0].click();
                     skip_button[1].click();
                     incrementSkipped();
                 } else if (skipbutton_old.length != 0 || previewcont_old.length != 0) {
@@ -48,13 +48,28 @@ function startSkipper() {
                     }
                     incrementSkipped();
                 }
-            });
+            }
+            var video = document.getElementsByTagName('video');
+
+            if (video.length == 0) {
+                return;
+            }
+
+            video = video[0];
+
+            if (video.readyState >= 2) {
+                performSkip();
+            } else {
+                video.addEventListener('loadeddata', () => {
+                    performSkip();
+                });
+            }
         }
 
         chrome.storage.local.get(['enabled'], function (result) {
             var enabled = result.enabled || false;
             if (enabled) {
-                performSkip();
+                performCheck();
             }
         });
     }
@@ -73,7 +88,7 @@ function startSkipper() {
 
         mutations.forEach(function (mutation) {
             if (mutation.type === 'childList') {
-                if (isVideo(mutation.addedNodes)) {
+                if (isVideo(mutation.addedNodes) || isVideo(mutation.removedNodes)) {
                     skipSegment();
                 }
             } else if (mutation.type === 'attributes') {
@@ -85,11 +100,4 @@ function startSkipper() {
     });
 
     observer.observe(html5_video_container_node, observerConfig);
-}
-
-async function incrementSkipped() {
-    chrome.storage.local.get(['skipped'], function (result) {
-        var value = result.skipped || 0;
-        chrome.storage.local.set({ skipped: value + 1 }, function () { });
-    });
 }

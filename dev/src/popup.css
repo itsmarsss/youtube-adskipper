@@ -13,7 +13,7 @@
 
 html {
     width: 300px;
-    height: 273px;
+    height: 270px;
     background: var(--background);
     user-select: none;
 }
@@ -67,12 +67,12 @@ a {
 }
 
 #icon {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
 }
 
 #title {
-    line-height: 40px;
+    line-height: 35px;
     font-size: 18px;
 }
 
