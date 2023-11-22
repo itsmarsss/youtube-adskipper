@@ -1,8 +1,6 @@
 var ytadskipper = (async function () {
-
     function detectAddedElements() {
         const targetNode = document.getElementsByClassName('html5-video-player')[0];
-
 
         const callback = function (mutationsList) {
             for (let mutation of mutationsList) {
@@ -49,12 +47,6 @@ var ytadskipper = (async function () {
             }
 
             function performSkip() {
-                async function incrementSkipped() {
-                    chrome.storage.local.get(['skipped'], (result) => {
-                        chrome.storage.local.set({ skipped: (result.skipped || 0) + 1 });
-                    });
-                }
-
                 let skipbutton_old = document.getElementsByClassName('ytp-ad-skip-button');
                 let previewcont_old = document.getElementsByClassName('ytp-ad-preview-container');
                 let skipbutton_new = document.getElementsByClassName('ytp-ad-skip-button-modern');
@@ -73,6 +65,12 @@ var ytadskipper = (async function () {
                         skipbutton_old[0].click();
                     }
                     incrementSkipped();
+                }
+
+                async function incrementSkipped() {
+                    chrome.storage.local.get(['skipped'], (result) => {
+                        chrome.storage.local.set({ skipped: (result.skipped || 0) + 1 });
+                    });
                 }
             }
         }
