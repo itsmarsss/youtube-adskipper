@@ -1,0 +1,1 @@
+chrome.runtime.onInstalled.addListener(function(n){"install"==n.reason&&(console.log(`This is a first install of ${chrome.runtime.getManifest().name}!`),chrome.storage.local.set({enabled:!0},function(){}))});

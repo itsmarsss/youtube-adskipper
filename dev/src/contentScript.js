@@ -24,7 +24,6 @@ var ytadskipper = (async function () {
     function skipSegment() {
         chrome.storage.local.get(['enabled'], (result) => {
             if (result.enabled || false) {
-                console.log(result.enabled)
                 waitForVideoLoad();
             }
         });

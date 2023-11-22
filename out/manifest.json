@@ -4,10 +4,10 @@
       "id": "youtubeadskipper.itsmarzzzzzz@protonmail.com"
     }
   },
-  "name": "YouTube AdSkipper/AdBlocker",
-  "version": "1.1.2",
+  "name": "YouTube AdBlocker | Working",
+  "version": "1.2.0",
   "manifest_version": 3,
-  "description": "The only YouTube AdSkipper/AdBlocker that works.",
+  "description": "The only YouTube AdBlocker/AdSkipper that works.",
   "author": "Marsss' Dev Team",
   "content_scripts": [
     {
@@ -16,6 +16,9 @@
       "run_at": "document_end"
     }
   ],
+  "background": {
+    "service_worker": "/src/installChecker.js"
+  },
   "permissions": ["storage"],
   "icons": {
     "16": "/assets/icon-16.png",
