@@ -67,21 +67,30 @@ var ytadskipper = (async function () {
                     let previewcont_old = document.getElementsByClassName('ytp-ad-preview-container');
                     let skipbutton_new = document.getElementsByClassName('ytp-ad-skip-button-modern');
 
-                    if (skipbutton_new.length != 0) {
-                        skipbutton_new[0].click();
-                        incrementSkipped();
-                    } else if (skipbutton_old.length != 0 || previewcont_old.length != 0) {
-                        if (video.duration == NaN) {
-                            return;
+                    let pollCount = 0;
+                    let skipPoll = setInterval(() => {
+                        pollCount++;
+                        if (pollCount >= 100) {
+                            clearInterval(skipPoll);
                         }
+                        if (skipbutton_new.length != 0) {
+                            skipbutton_new[0].click();
+                            incrementSkipped();
+                            clearInterval(skipPoll);
+                        } else if (skipbutton_old.length != 0 || previewcont_old.length != 0) {
+                            if (video.duration == NaN) {
+                                return;
+                            }
 
-                        video.currentTime = video.duration;
+                            video.currentTime = video.duration;
 
-                        if (skipbutton_old.length != 0) {
-                            skipbutton_old[0].click();
+                            if (skipbutton_old.length != 0) {
+                                skipbutton_old[0].click();
+                            }
+                            incrementSkipped();
+                            clearInterval(skipPoll);
                         }
-                        incrementSkipped();
-                    }
+                    }, 100);
 
                     async function incrementSkipped() {
                         chrome.storage.local.get(['skipped'], (result) => {
