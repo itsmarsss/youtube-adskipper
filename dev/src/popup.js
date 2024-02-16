@@ -37,8 +37,8 @@ chrome.storage.local.get(['skipped'], function (result) {
 
 function animateNumber(targetNumber, duration) {
     const startNumber = 0;
-    const increment = 1; // You can adjust this value to change the increment amount
-    const delay = Math.floor(duration / (targetNumber / increment));
+    const increment = 1;
+    const delay = Math.max(Math.floor(duration / (targetNumber / increment)), 1);
 
     function updateNumber(currentNumber) {
         skip_count.textContent = currentNumber;
