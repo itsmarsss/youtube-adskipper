@@ -56,6 +56,7 @@ var ytadskipper = (async function () {
                                 if (skipbutton.length != 0) {
                                     chrome.storage.local.get(['enabled'], (result) => {
                                         if (result.enabled || false) {
+                                            video.currentTime = video.duration;
                                             skipbutton[0].click();
                                             incrementSkipped();
                                             clearInterval(skipPoll);
