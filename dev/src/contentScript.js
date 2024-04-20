@@ -1,15 +1,14 @@
 var ytadskipper = (async function () {
+
     waitForHTML5();
 
     function waitForHTML5() {
         const callback = function (mutationsList) {
             for (let mutation of mutationsList) {
-                if (mutation.type === 'childList') {
-                    mutation.addedNodes.forEach(function (node) {
-                        if (node.nodeType === 1 && node.classList.contains('html5-video-player')) {
-                            detectAddedElements();
-                        }
-                    });
+                if (mutation.type === 'attributes') {
+                    if (mutation.attributeName === 'src' && mutation.target.tagName === 'VIDEO') {
+                        skipSegment();
+                    }
                 }
             }
         };
@@ -18,85 +17,61 @@ var ytadskipper = (async function () {
 
         observer.observe(document, { attributes: true, childList: true, subtree: true });
 
-        function detectAddedElements() {
-            const targetNode = document.getElementsByClassName('html5-video-player')[0];
+        async function skipSegment() {
+            let video = document.getElementsByTagName('video');
 
-            const callback = function (mutationsList) {
-                for (let mutation of mutationsList) {
-                    if (mutation.type === 'childList') {
-                        mutation.addedNodes.forEach(function (node) {
-                            if (node.nodeType === 1 && node.classList.contains('ytp-ad-player-overlay')) {
-                                skipSegment();
-                            }
-                        });
-                    }
-                }
-            };
+            if (video.length == 0) {
+                return;
+            }
 
-            const observer = new MutationObserver(callback);
+            video = video[0];
 
-            observer.observe(targetNode, { attributes: true, childList: true, subtree: true });
-        }
-
-        function skipSegment() {
-            chrome.storage.local.get(['enabled'], (result) => {
-                if (result.enabled || false) {
-                    waitForVideoLoad();
-                }
-            });
-
-            function waitForVideoLoad() {
-                let video = document.getElementsByTagName('video');
-
-                if (video.length == 0) {
-                    return;
-                }
-
-                video = video[0];
-
-                if (video.readyState >= 2) {
+            if (video.readyState >= 2) {
+                performSkip();
+            } else {
+                video.addEventListener('loadeddata', () => {
                     performSkip();
-                } else {
-                    video.addEventListener('loadeddata', () => {
-                        performSkip();
+                });
+            }
+
+            function performSkip() {
+                fetch('https://raw.githubusercontent.com/itsmarsss/youtube-adskipper/main/classes')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(text => {
+                        const lines = text.split('\n');
+
+                        let pollCount = 0;
+                        let skipPoll = setInterval(() => {
+                            pollCount++;
+                            if (pollCount >= 100) {
+                                clearInterval(skipPoll);
+                            }
+                            lines.forEach(line => {
+                                const skipbutton = document.getElementsByClassName(line);
+                                if (skipbutton.length != 0) {
+                                    chrome.storage.local.get(['enabled'], (result) => {
+                                        if (result.enabled || false) {
+                                            skipbutton[0].click();
+                                            incrementSkipped();
+                                            clearInterval(skipPoll);
+                                        }
+                                    });
+                                }
+                            });
+                        }, 100);
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
                     });
-                }
-
-                function performSkip() {
-                    let skipbutton_old = document.getElementsByClassName('ytp-ad-skip-button');
-                    let previewcont_old = document.getElementsByClassName('ytp-ad-preview-container');
-                    let skipbutton_new = document.getElementsByClassName('ytp-ad-skip-button-modern');
-
-                    let pollCount = 0;
-                    let skipPoll = setInterval(() => {
-                        pollCount++;
-                        if (pollCount >= 100) {
-                            clearInterval(skipPoll);
-                        }
-                        if (skipbutton_new.length != 0) {
-                            skipbutton_new[0].click();
-                            incrementSkipped();
-                            clearInterval(skipPoll);
-                        } else if (skipbutton_old.length != 0 || previewcont_old.length != 0) {
-                            if (video.duration == NaN) {
-                                return;
-                            }
-
-                            video.currentTime = video.duration;
-
-                            if (skipbutton_old.length != 0) {
-                                skipbutton_old[0].click();
-                            }
-                            incrementSkipped();
-                            clearInterval(skipPoll);
-                        }
-                    }, 100);
-
-                    async function incrementSkipped() {
-                        chrome.storage.local.get(['skipped'], (result) => {
-                            chrome.storage.local.set({ skipped: (result.skipped || 0) + 1 });
-                        });
-                    }
+                async function incrementSkipped() {
+                    chrome.storage.local.get(['skipped'], (result) => {
+                        chrome.storage.local.set({ skipped: (result.skipped || 0) + 1 });
+                    });
                 }
             }
         }
